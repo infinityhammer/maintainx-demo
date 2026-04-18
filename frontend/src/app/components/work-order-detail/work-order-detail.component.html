@@ -1,0 +1,71 @@
+<div class="page-header">
+  <h1>
+    <a routerLink="/work-orders" style="text-decoration: none; color: #1e6bde; margin-right: 0.5rem;">←</a>
+    Work Order Detail
+  </h1>
+</div>
+
+@if (error()) {
+  <div class="error-box">{{ error() }}</div>
+}
+
+@if (loading()) {
+  <p>Loading…</p>
+}
+
+@if (workOrder(); as wo) {
+  <div class="card" style="margin-bottom: 1.5rem;">
+    <h2>{{ wo.title }}</h2>
+    <p style="color: #475569;">{{ wo.description || 'No description provided.' }}</p>
+    <div style="display: flex; gap: 2rem; margin-top: 1rem; flex-wrap: wrap;">
+      <div>
+        <label>Status</label>
+        <span class="badge status-{{ wo.status }}">{{ wo.status }}</span>
+      </div>
+      <div>
+        <label>Priority</label>
+        <span class="priority priority-{{ wo.priority }}">{{ wo.priority }}</span>
+      </div>
+      <div>
+        <label>Aircraft</label>
+        <strong>{{ wo.aircraft?.tail_number ?? wo.aircraft_id }}</strong>
+        @if (wo.aircraft) {
+          <small style="color: #64748b; margin-left: 0.5rem;">{{ wo.aircraft.model }}</small>
+        }
+      </div>
+      <div>
+        <label>Created</label>
+        <span>{{ wo.created_at | date: 'short' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom: 1.5rem;">
+    <h2>Assign Technician</h2>
+    <div style="display: flex; gap: 0.5rem; align-items: flex-end; max-width: 480px;">
+      <div style="flex: 1;">
+        <label for="assignee">Assigned To</label>
+        <input id="assignee" name="assignee" [(ngModel)]="assignee" placeholder="e.g. SrA Patel" />
+      </div>
+      <button (click)="saveAssignee()">Save</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Transition Status</h2>
+    @if (nextStatuses().length === 0) {
+      <p style="color: #64748b; margin: 0;">No further transitions allowed from <strong>{{ wo.status }}</strong>.</p>
+    } @else {
+      <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+        @for (s of nextStatuses(); track s) {
+          <button
+            [class.danger]="s === 'cancelled'"
+            [class.secondary]="s !== 'cancelled' && s !== 'complete'"
+            (click)="transition(s)">
+            → {{ s }}
+          </button>
+        }
+      </div>
+    }
+  </div>
+}

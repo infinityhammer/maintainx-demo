@@ -1,0 +1,47 @@
+<div class="page-header">
+  <h1>Work Orders</h1>
+  <div>
+    <button class="secondary" (click)="load()" [disabled]="loading()">Refresh</button>
+    <button (click)="toggleForm()">{{ showForm() ? 'Close' : 'New Work Order' }}</button>
+  </div>
+</div>
+
+@if (showForm()) {
+  <div class="card" style="margin-bottom: 1.5rem;">
+    <h2>New Work Order</h2>
+    <app-work-order-form (created)="onCreated()"></app-work-order-form>
+  </div>
+}
+
+@if (error()) {
+  <div class="error-box">{{ error() }}</div>
+}
+
+@if (!loading() && orders().length === 0) {
+  <div class="empty-state">No work orders yet. Create one to get started.</div>
+} @else {
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Title</th>
+        <th>Aircraft</th>
+        <th>Priority</th>
+        <th>Status</th>
+        <th>Assigned</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (wo of orders(); track wo.id) {
+        <tr (click)="open(wo.id)">
+          <td>{{ wo.id }}</td>
+          <td><strong>{{ wo.title }}</strong></td>
+          <td>{{ wo.aircraft?.tail_number ?? wo.aircraft_id }}</td>
+          <td><span class="priority priority-{{ wo.priority }}">{{ wo.priority }}</span></td>
+          <td><span class="badge status-{{ wo.status }}">{{ wo.status }}</span></td>
+          <td>{{ wo.assigned_to ?? '—' }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+}

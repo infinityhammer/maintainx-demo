@@ -1,0 +1,38 @@
+<form (submit)="$event.preventDefault(); submit()">
+  @if (error()) {
+    <div class="error-box">{{ error() }}</div>
+  }
+  <div class="form-grid">
+    <div class="full">
+      <label for="wo-title">Title</label>
+      <input id="wo-title" name="title" [(ngModel)]="title" required />
+    </div>
+    <div>
+      <label for="wo-aircraft">Aircraft</label>
+      <select id="wo-aircraft" name="aircraftId" [(ngModel)]="aircraftId" required>
+        <option [ngValue]="null" disabled>Select aircraft…</option>
+        @for (a of aircraft(); track a.id) {
+          <option [ngValue]="a.id">{{ a.tail_number }} — {{ a.model }}</option>
+        }
+      </select>
+    </div>
+    <div>
+      <label for="wo-priority">Priority</label>
+      <select id="wo-priority" name="priority" [(ngModel)]="priority">
+        <option value="low">Low</option>
+        <option value="normal">Normal</option>
+        <option value="high">High</option>
+        <option value="critical">Critical</option>
+      </select>
+    </div>
+    <div class="full">
+      <label for="wo-description">Description</label>
+      <textarea id="wo-description" name="description" rows="3" [(ngModel)]="description"></textarea>
+    </div>
+    <div class="full">
+      <button type="submit" [disabled]="submitting()">
+        {{ submitting() ? 'Creating…' : 'Create Work Order' }}
+      </button>
+    </div>
+  </div>
+</form>

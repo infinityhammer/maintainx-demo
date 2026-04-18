@@ -1,0 +1,33 @@
+<div class="page-header">
+  <h1>Aircraft</h1>
+  <button class="secondary" (click)="load()" [disabled]="loading()">Refresh</button>
+</div>
+
+@if (error()) {
+  <div class="error-box">{{ error() }}</div>
+}
+
+@if (!loading() && aircraft().length === 0) {
+  <div class="empty-state">No aircraft on record.</div>
+} @else {
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Tail Number</th>
+        <th>Model</th>
+        <th>Squadron</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (a of aircraft(); track a.id) {
+        <tr>
+          <td><strong>{{ a.tail_number }}</strong></td>
+          <td>{{ a.model }}</td>
+          <td>{{ a.squadron }}</td>
+          <td><span class="badge status-{{ a.status }}">{{ a.status }}</span></td>
+        </tr>
+      }
+    </tbody>
+  </table>
+}
