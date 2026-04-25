@@ -1,5 +1,7 @@
 # MaintainX Demo
 
+![CI](https://github.com/infinityhammer/maintainx-demo/actions/workflows/ci.yml/badge.svg)
+
 [![Backend Tests](https://github.com/infinityhammer/maintainx-demo/actions/workflows/backend-tests.yml/badge.svg)](https://github.com/infinityhammer/maintainx-demo/actions/workflows/backend-tests.yml)
 [![Playwright E2E Tests](https://github.com/infinityhammer/maintainx-demo/actions/workflows/playwright-tests.yml/badge.svg)](https://github.com/infinityhammer/maintainx-demo/actions/workflows/playwright-tests.yml)
 
